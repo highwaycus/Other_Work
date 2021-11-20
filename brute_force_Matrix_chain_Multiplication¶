@@ -1,0 +1,142 @@
+# Problem: Matrix-chain Multiplication
+# Print Expression with the multiplication order. For example, ((D1 D2)(D3 D4)).
+# 1
+# Brute-Force
+##############################################################################
+import numpy as np
+
+
+def matrix_multiply(a, b):
+    try:
+        a_col = len(a[0])
+        a_row = len(a)
+        b_row = len(b)
+        b_col = len(b[0])
+    except:
+        print('error')
+        return
+        
+    assert a_col == b_row
+    c = [[0] * b_col] * a_row
+    for i in range(a_row):
+        for j in range(b_col):
+            c[i][j] = 0
+            for k in range(a_col):
+                c[i][j] += (a[i][k] * b[k][j])
+    return c
+
+
+class MCM(object):
+    def __init__(self, chain):  
+        """
+        self.total_n: Number of matrices
+        """
+        if len(chain):
+            if type(chain[0]) is np.ndarray:
+                chain = [c.tolist() for c in chain]                    
+            if (type(chain[0]) is int) or (type(chain[0]) == float):
+                self.total_n = len(chain) - 1
+                self.dim_list = chain
+            else:
+                self.total_n = len(chain)
+                self.dim_list = [len(chain[0])] + [len(chain[j][0]) for j in range(self.total_n)]
+        self.chain = chain
+        self.fake_chain = [i for i in range(1, self.total_n + 1)]
+        
+    def too_short_input(self):
+        assert self.total_n <= 2 
+        step = 1
+        for j in range(len(self.dim_list)):
+            step *= self.dim_list[j]
+        min_rec = self.fake_chain
+        return min_rec, step
+    
+    def permutation_matrix(self, num):
+        n = len(num)
+        if n <= 2:
+            return num
+        ans = []
+        for i in range(1, n):
+            s = num[i - 1: i + 1]
+            new_num = num[:i - 1] + [s] + num[i + 1:]
+            per_ans = self.permutation_matrix(new_num)
+            if n < self.total_n:
+                ans.append(per_ans)
+            else:
+                ans += per_ans
+        return ans 
+    
+    def calculate_computation(self, left, right, s= 0):
+        if (type(left) is not list) and (type(right) is not list):
+            s += self.dim_list[left - 1] * self.dim_list[left] * self.dim_list[right]
+            return s, self.dim_list[left - 1], self.dim_list[right]
+        else:
+            if type(left) is list:
+                s, le0,le1 = self.calculate_computation(left[0], left[1], s)
+                if type(right) is list:
+                    s, dr0,dr1 = self.calculate_computation(right[0], right[1], s)
+                else:
+                    dr1 = self.dim_list[right]
+            elif type(right) is list:
+                s, dr0,dr1 = self.calculate_computation(right[0], right[1], s)
+                le0, le1 = self.dim_list[left-1], self.dim_list[left]
+            s += le0 * le1 * dr1
+            return s, le0, dr1
+    
+    def brute_force(self):
+        """
+        output: min_rec = [[[1, 2], 3], 4] = (((AB)C)D); step = total computation needed
+        """
+        if self.total_n <= 2:
+            min_rec, step = self.too_short_input()
+        else:
+            permu = self.permutation_matrix(self.fake_chain)
+            permu_dict = {}
+            for p in permu:
+                if str(p) in permu:
+                    pass
+                else:
+                    permu_dict[str(p)] = p
+            min_mcm = float('Inf')
+            min_rec = ''
+            total = 0
+            for p_str in permu_dict:
+                p_ = permu_dict[p_str]
+                si, d0, d1 = self.calculate_computation(p_[0], p_[1], s= 0)
+                if si < min_mcm:
+                    min_rec = p_str
+                    min_mcm = si
+            use_m = permu_dict[min_rec]
+            step = self.calculate_computation(use_m[0], use_m[1], s= 0)[0]            
+#         print('Computaiton=', step)
+        return min_rec, step
+
+
+#####################################################
+# Brute-Force
+#####################################################
+# 1. dim as input: 3 matrices, with dim = (10,100), (100,5), (5, 50)
+def main():
+  chain = [10,100,5,50]
+  print('chain=',chain)
+  mm = MCM(chain=chain)
+  opt, comp = mm.brute_force()
+  print('Optimal = {}'.format(opt))
+  print('Computations = {}'.format(comp))
+  
+  # matrices as input: 3 matrices, with dim = (10,100), (100,5), (5, 50)
+  A=np.random.random((10,100))
+  B=np.random.random((100,5))
+  C=np.random.random((5,50))
+  chain = [A, B, C]
+  mm = MCM(chain=chain)
+  opt, comp = mm.brute_force()
+  print('Optimal = {}'.format(opt))
+  print('Computations = {}'.format(comp))
+
+
+######################################################
+if __name__ == '__main__':
+  main()
+
+    
