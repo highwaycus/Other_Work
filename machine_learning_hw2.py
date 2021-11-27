@@ -1,12 +1,13 @@
-# Machine Learning B555, Fall 2021
+# Machine Learning
 # Programming Project 2
-# Andrew Huang, UID:2000921832
+
 
 ############################################
-# Task 1
+# Task 1: Regularization
 import csv
 import numpy as np
 import matplotlib.pyplot as plt
+import time
 
 
 def open_csv_file(file_name, save_path='pp2/pp2data/pp2data/'):
@@ -27,9 +28,7 @@ def open_csv_file(file_name, save_path='pp2/pp2data/pp2data/'):
 
 def linear_regression_predict(phi, t, lambda_value):
     # linear regression model with regularization
-    # return w
     lam_matrix = [[int(j == i) * lambda_value for j in range(len(phi[0]))] for i in range(len(phi[0]))]
-    # w = (lambda*I + phi^T phi)^(-1) phi^T t
     ans = (lam_matrix + np.dot(np.transpose(phi), phi))
     ans = np.linalg.inv(ans)
     phi_t = np.dot(np.transpose(phi), t)
@@ -90,13 +89,9 @@ def main_task_1(save_path='pp2/pp2data/pp2data/'):
         total_record[group] = record
     np.save(save_path + 'task_1_record.npy', total_record, allow_pickle=True)
 
-
-# Compare with true MSE
-
+    
 ############################################
-# Task 2
-
-
+# Task 2: Model Selection Using Validation
 def stratifid_cross_validation(x, y, fold_n=10):
     # Do 10-fold stratified cross validation
     data = [x[i] + y[i] for i in range(len(x))]
@@ -165,10 +160,7 @@ def main_task_2(save_path='pp2/pp2data/pp2data/'):
 
 
 ##############################################################
-# Task 3
-import time
-
-
+# Task 3: Bayesian Model Selection
 def main_task_3(save_path):
     group_list = ['crime', 'wine', 'artsmall', 'artlarge']
     task_record = {}
@@ -205,12 +197,6 @@ def main_task_3(save_path):
             print(alpha-alpha_new)
         alpha, beta = float(alpha_new), float(beta_new)
         lam_v = alpha / beta
-        # phitphi_ = phitphi.copy()
-        # for j in range(len(phitphi_[i])):
-        #     phitphi_[i][j] *= beta
-        # S_n_inv = np.mat([[int(i == j) * alpha for j in range(w_dim)] for i in range(w_dim)]) + np.mat(phitphi_)
-        # S_n = np.linalg.inv(S_n_inv)
-        # m_n_w = beta * np.dot(S_n, np.dot(np.transpose(phi), t))
         test_data = open_csv_file('test-{}.csv'.format(group))
         test_data_R = open_csv_file('testR-{}.csv'.format(group))
         mse_test = mse_main(test_data, test_data_R, m_n)
@@ -222,7 +208,7 @@ def main_task_3(save_path):
 
 
 #######################################################
-# Task 4
+# Task 4: Discussion of Results
 def main_task_4(save_path):
     task1 = np.load(save_path + 'task_1_record.npy', allow_pickle=True).item()
     task2 = np.load(save_path + 'task_2_record.npy', allow_pickle=True).item()
@@ -243,7 +229,6 @@ def main_task_4(save_path):
 ######################################################
 if __name__ == '__main__':
     save_path = 'pp2data/'
-    # save_path = 'pp2/pp2data/pp2data/'
     print('##################################')
     print('Task 1: ')
     main_task_1(save_path)
