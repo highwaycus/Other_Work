@@ -1,6 +1,7 @@
 # Machine Learning
-# Programming Project 2
-
+'''
+Explore the role of regularization in LR and to investigate two methods for model selection (evidence maximization and cross validation).
+'''
 
 ############################################
 # Task 1: Regularization
