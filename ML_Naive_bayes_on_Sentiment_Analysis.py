@@ -1,3 +1,6 @@
+'''
+ABuild Naive Bayes algorithm with maximum likelihood and MAP solutions and evaluate it using cross validation on the task of sentiment analysis.
+'''
 import math
 import os
 import csv
