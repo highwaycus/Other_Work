@@ -1,4 +1,4 @@
-The README is for Programming Project 1, _assignment_1.py_
+The README is for *ML_Naive_bayes_on_Sentiment_Analysis.py*
 
 * **Save the document**\
 For the three files in _pp1data.zip_, store in  _'pp1data/'_. You can replace the route as the _base_dir_ in _main_4_experiments()_.  
