@@ -1,7 +1,6 @@
 # Problem: Matrix-chain Multiplication
 # Print Expression with the multiplication order. For example, ((D1 D2)(D3 D4)).
-# 1
-# Brute-Force
+
 ##############################################################################
 import numpy as np
 
@@ -108,7 +107,6 @@ class MCM(object):
                     min_mcm = si
             use_m = permu_dict[min_rec]
             step = self.calculate_computation(use_m[0], use_m[1], s= 0)[0]            
-#         print('Computaiton=', step)
         return min_rec, step
 
 
@@ -116,6 +114,7 @@ class MCM(object):
 # Brute-Force
 #####################################################
 # 1. dim as input: 3 matrices, with dim = (10,100), (100,5), (5, 50)
+
 def main():
   chain = [10,100,5,50]
   print('chain=',chain)
