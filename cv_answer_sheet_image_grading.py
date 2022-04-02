@@ -11,9 +11,9 @@ It should also output an x on a line for which it believes student has written i
 For the task, we first split the answer sheet to smaller images, each image contains one question.
 Therfore, it will be easier for recognizing the answers, and would not mixed up with other questions.
 
-The script performs the process of splitting images.
+The script performs the process of (1) splitting images (2) recognizing and determine student's answer on the sheet images
 '''
-import os.path
+import os
 import time
 from PIL import Image, ImageEnhance
 import numpy as np
@@ -164,6 +164,103 @@ def subimage_main(img_name='blank_form.jpg', pic_route='CV/a1/jmpresne-etachen-a
                 k += 1
 
     print('Save {} sub-images at {}'.format(n_file, pic_route + sub_file))
+    return pic_route + sub_file
+    
+    
+##########################################################
+# Answer Recognition
+# segment sub image to 6 pieces
+def segment_to_answere_scale(question_img='q_1.png', sub_img_route=''):
+    im = Image.open(sub_img_route + question_img)
+    # Turn image to gray-scale
+    im = im.convert("L")
+    im = ImageEnhance.Color(im).enhance(10)
+    im_width = im.width
+    im_height = im.height
+    im_array = np.array(im.getdata())
+    im_matrix = [[None for i in range(im_width)] for j in range(im_height)]
+    for k in range(len(im_array)):
+        x_loc = k % im_width
+        y_loc = k // im_width
+        im_matrix[y_loc][x_loc] = im_array[k]
+    x = im_width - 1
+    white_vertical = []
+    while x > 10:
+        if np.mean([im_matrix[i][(x-10):x] for i in range(im_height)]) > 250:
+            white_vertical.append(x)
+        x -= 1
+    tmp = 0
+    white_block = []
+    for j in range(1, len(white_vertical)):
+        if white_vertical[j] < (white_vertical[j - 1] - 5):
+            white_block.append(white_vertical[tmp: (j - 1)])
+            tmp = j
+    white_vertical_center = [np.mean(v) for v in white_block]
+    white_vertical_center.sort()
+
+    y_center = im_height//2
+    x_mean = []
+    thres = 130
+    student_ans = []
+    while ((not x_mean) and (thres <= 150)) or (not student_ans):
+        x_idx = im_width - 1
+        x_mean = []
+        while x_idx >= 20:
+            if np.mean([im_matrix[j][(x_idx - 20): x_idx] for j in range(y_center - 1, y_center + 2)]) < thres:
+                x_mean = [1] + x_mean
+            else:
+                x_mean = [0] + x_mean
+            x_idx -= 1
+        student_ans = []
+        marked_period = []
+        for id in range(len(x_mean)):
+            if x_mean[id] == 1:
+                marked_period.append(id)
+            else:
+                if len(marked_period) > 5:
+                    student_ans.append(20 + np.mean(marked_period))
+                marked_period = []
+        if len(marked_period) > 5:
+            student_ans.append(20 + np.mean(marked_period))
+        thres += 10
+    if len(white_vertical_center) >= 5:
+        student_ans = [s for s in student_ans if s > white_vertical_center[-5] - 5]
+    alphabet_ans = []
+    a_list = ['A', 'B', 'C', 'D', 'E']
+    alphabet_dict = {i: a_list[i] for i in range(5)}
+    for s in student_ans:
+        vx = -1
+        flag = 1
+        while vx > -len(white_vertical_center):
+            if s > white_vertical_center[vx]:
+                alphabet_ans.append(alphabet_dict[5 + vx])
+                flag = 0
+                break
+            vx -= 1
+        if flag:
+            alphabet_ans.append('A')
+    if len(alphabet_ans) > 1:
+        alphabet_ans = sorted(list(set(alphabet_ans)))
+    return alphabet_ans
+
+
+def test_main(sub_img_route):
+    student_ans_sheet = []
+    for f in os.listdir(sub_img_route):
+        student_ans_sheet.append((int(f[2:-4]),  segment_to_answere_scale(f, sub_img_route)))
+    student_ans_sheet.sort(key=lambda x: x[0])
+    # print(student_ans_sheet)
+    with open(pic_route + 'a-27_groundtruth.txt') as f:
+        lines = f.readlines()
+    k = 0
+    for i in range(85):
+        ground_an = set(p for p in lines[i].split(' ')[1].replace('\n', ''))
+        rec_student = set(p for p in student_ans_sheet[i][1])
+        if rec_student == ground_an:
+            k += 1
+        else:
+            print(i + 1, 'wrong:', rec_student, ground_an)
+    print(k / 85)
 
 
 ##########################################################
@@ -172,9 +269,5 @@ if __name__ == '__main__':
     img_name = input()
     print('Type save route: (Default: \'test-images/\')')
     pic_route = input()
-    # t1 = time.time()
-    subimage_main(img_name=img_name, pic_route=pic_route)
-    # print('total time:', time.time()-t1)
-    # for f in os.listdir(pic_route):
-    #     if f.endswith('jpg'):
-    #         main(img_name=f)
+    sub_img_route = subimage_main(img_name=img_name, pic_route=pic_route)
+    test_main(sub_img_route)
