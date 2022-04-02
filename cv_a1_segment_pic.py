@@ -1,3 +1,18 @@
+'''
+The Assignment is to write a program that accepts a scanned image file of a printed form, 
+and produces an output file that contains the student's marked answers. 
+There are 31 possible correct answers per question, because some questions might instruct the student
+to fill in multiple options in the same question (e.g. choices A and B might both be true so the student
+should mark both). 
+The program should create an output file that indicates the answers that it has recognized from the student's answer sheet. 
+The output file should have one line per question, with the question number, followed by a space, followed by the letter(s) that were selected by the student. 
+It should also output an x on a line for which it believes student has written in an answer to the left of the question
+
+For the task, we first split the answer sheet to smaller images, each image contains one question.
+Therfore, it will be easier for recognizing the answers, and would not mixed up with other questions.
+
+The script performs the process of splitting images.
+'''
 import os.path
 import time
 from PIL import Image, ImageEnhance
@@ -153,9 +168,9 @@ def subimage_main(img_name='blank_form.jpg', pic_route='CV/a1/jmpresne-etachen-a
 
 ##########################################################
 if __name__ == '__main__':
-    print('Type tmg file name (inclde .jpg or .png:')
+    print('Type tmg file name (endswith .jpg or .png:')
     img_name = input()
-    print('Type save route: (Default: \'CV/a1/jmpresne-etachen-andhuan-a1-main/test-images/\')')
+    print('Type save route: (Default: \'test-images/\')')
     pic_route = input()
     # t1 = time.time()
     subimage_main(img_name=img_name, pic_route=pic_route)
