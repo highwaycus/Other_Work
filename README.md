@@ -1,6 +1,6 @@
 ### Course-Work
 
-2 branches: *Algorithm_Related*, *Machine Learning* , *Computer Vision*
+3 branches: *Algorithm_Related*, *Machine Learning* , *Computer Vision*
 
 This repository contains some course works. I revised and uploaded them after they were graded.
 
