@@ -10,6 +10,8 @@ The works are solely done by myself, not teamworks.
 
 If a ducument name begins with "ML...", it is an assignment from Machine Learning-related courses.
 
+If a ducument name begins with "RL...", it is an assignment from Reinforcement Learning-related courses.
+
 If a ducument name begins with "CV...", it is an assignment from Machine Learning-related courses.
 
 Otherwise, it is an assignemnt from Algorithm courses.
