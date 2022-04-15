@@ -6,9 +6,9 @@ This repository contains some course works. I revised and uploaded them after th
 
 The works are solely done by myself, not teamworks.
 
-#### Names
+* #### Names
 
-If a ducument name begins with "ML...", it is an assignment from Machine Learning-related courses.
+  * If a ducument name begins with "ML...", it is an assignment from Machine Learning-related courses.
 
 If a ducument name begins with "RL...", it is an assignment from Reinforcement Learning-related courses.
 
