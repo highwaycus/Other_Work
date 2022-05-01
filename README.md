@@ -13,4 +13,4 @@ The works are either solely done by myself, or only contain my part in group asi
   * Computer Vision Branch:
     * If a ducument name begins with "CV...", it is an assignment from Machine Learning-related courses.
   * Algorithm Branch:
-    * Otherwise, it is an assignemnt from Algorithm courses.
+    * Otherwise, it is an assignemnt from Algorithm courses. 
