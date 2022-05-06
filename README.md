@@ -2,9 +2,7 @@
 
 3 branches: *Algorithm_Related*, *Machine Learning* , *Computer Vision*
 
-This repository contains some course works. I revised and uploaded them after they were graded.
-
-The works are either solely done by myself, or only contain my part in group asignments. 
+The works are either solely done by myself, or only contain my part in group . 
 
 * #### Names
   * Machine Learning Branch:
