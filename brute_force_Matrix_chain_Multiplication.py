@@ -1,6 +1,7 @@
-# Problem: Matrix-chain Multiplication
-# Print Expression with the multiplication order. For example, ((D1 D2)(D3 D4)).
-
+'''
+Problem: Matrix-chain Multiplication
+Print Expression with the multiplication order. For example, ((D1 D2)(D3 D4)).
+'''
 ##############################################################################
 import numpy as np
 
