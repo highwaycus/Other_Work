@@ -1,12 +1,18 @@
-### Some-Work
+# Selected Algorithm and Computer Vision Work
 
-2 branches: *Algorithm_Related*, *Computer Vision*
+This repository collects smaller algorithm and computer vision projects that did not need separate repositories. Each item is either my individual work or only the part I contributed to a group project.
 
-The works are either solely done by myself, or only contain my part in group . 
+## Why this repository exists
 
-* #### Names
-  * Computer Vision Branch:
-    * If a ducument name begins with "CV...", it is computer vision-related project.
-  * Algorithm Branch:
-    * Otherwise, it is related to Algorithm. 
-   
+Not every useful exercise becomes a full project. I keep these pieces together so I can show the problems I worked on without making each one look larger than it was.
+
+## Organization
+
+The work is divided into two branches:
+
+- `Algorithm_Related`
+- `Computer Vision`
+
+## Naming convention
+
+Files whose names begin with `CV` belong to the computer vision work. The remaining files are algorithm-related.
